@@ -97,7 +97,7 @@ func (c *converter) buildAIPrompt(req *ConvertRequest) (string, error) {
 			prompt, err = c.promptBuilder.BuildPromptFromTheme(theme, req.Markdown, nil)
 			if err != nil {
 				c.log.Warn("build prompt from theme failed, using raw prompt", zap.Error(err))
-				prompt = theme.AIPrompt + "\n\n```\n" + req.Markdown + "\n```"
+				prompt = theme.Prompt + "\n\n```\n" + req.Markdown + "\n```"
 			} else {
 				// 验证 Prompt 内容
 				validation := ValidatePromptContent(prompt)

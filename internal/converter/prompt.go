@@ -188,7 +188,7 @@ func (pb *PromptBuilder) BuildPromptFromTheme(theme *Theme, markdown string, var
 	}
 
 	// 使用主题的 Prompt 作为模板
-	prompt := theme.AIPrompt
+	prompt := theme.Prompt
 
 	// 替换 {{MARKDOWN}} 变量
 	if strings.Contains(prompt, "{{MARKDOWN}}") {
