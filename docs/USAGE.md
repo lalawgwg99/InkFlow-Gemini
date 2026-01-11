@@ -4,12 +4,44 @@
 
 ## 目录
 
+- [Claude Code 集成](#claude-code-集成)
 - [基础使用](#基础使用)
 - [转换模式](#转换模式)
 - [图片处理](#图片处理)
 - [主题定制](#主题定制)
 - [草稿管理](#草稿管理)
 - [完整示例](#完整示例)
+
+---
+
+## Claude Code 集成
+
+### 安装（最简单）
+
+在 Claude Code 中运行：
+
+```bash
+/plugin marketplace add geekjourneyx/md2wechat-skill
+/plugin install md2wechat@geekjourneyx-md2wechat-skill
+```
+
+### 使用方式
+
+安装后，直接与 Claude 对话即可：
+
+```
+请用秋日暖光主题将 article.md 转换为微信公众号格式，并上传到草稿箱
+```
+
+```
+帮我把这篇技术文章用深海静谧主题转换，预览效果给我看
+```
+
+Claude 会自动：
+1. 调用 md2wechat 转换 Markdown
+2. 应用你选择的主题
+3. 上传图片到微信
+4. 创建草稿或显示预览
 
 ---
 

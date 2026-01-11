@@ -7,8 +7,24 @@
 [![Go Version](https://img.shields.io/badge/Go-1.24+-00ADD8?logo=go)](https://golang.org)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![GitHub Release](https://img.shields.io/badge/download-latest-green)](https://github.com/geekjourneyx/md2wechat-skill/releases)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-purple)](#-claude-code-集成)
 
-[快速开始](#-5分钟快速上手) • [功能介绍](#-核心功能) • [使用说明](#-使用方法) • [常见问题](#-常见问题)
+[快速开始](#-5分钟快速上手) • [Claude Code](#-claude-code-集成) • [功能介绍](#-核心功能) • [使用说明](#-使用方法) • [常见问题](#-常见问题)
+
+---
+
+## 🚀 Claude Code 用户（推荐）
+
+在 Claude Code 中运行以下命令即可使用：
+
+```bash
+/plugin marketplace add geekjourneyx/md2wechat-skill
+/plugin install md2wechat@geekjourneyx-md2wechat-skill
+```
+
+然后直接对话：**"请用秋日暖光主题将 article.md 转换为微信公众号格式"**
+
+---
 
 </div>
 
@@ -384,7 +400,25 @@ md2wechat 提供了 **Claude Code Skill**，让你在 Claude Code 中直接使�
 
 ### 安装方式
 
-#### 方式一：项目内使用（推荐）
+#### 方式一：Plugin Marketplace（推荐，最简单）
+
+在 Claude Code 中运行以下命令：
+
+```bash
+# 添加插件市场
+/plugin marketplace add geekjourneyx/md2wechat-skill
+
+# 安装插件
+/plugin install md2wechat@geekjourneyx-md2wechat-skill
+```
+
+安装后，直接在 Claude Code 中对话即可使用：
+
+```
+请用秋日暖光主题将 article.md 转换为微信公众号格式
+```
+
+#### 方式二：项目内使用
 
 克隆项目后，Skill 自动可用：
 
@@ -394,7 +428,7 @@ cd md2wechat-skill
 # 在 Claude Code 中直接使用
 ```
 
-#### 方式二：全局安装
+#### 方式三：全局安装
 
 将 Skill 复制到全局目录：
 
@@ -403,22 +437,10 @@ cd md2wechat-skill
 cp -r skill/md2wechat ~/.claude/skills/
 ```
 
-#### 方式三：创建符号链接
+#### 方式四：创建符号链接
 
 ```bash
 ln -s /path/to/md2wechat-skill/skill/md2wechat ~/.claude/skills/md2wechat
-```
-
-### 使用方法
-
-在 Claude Code 中直接对话：
-
-```
-请用秋日暖光主题将 article.md 转换为微信公众号格式
-```
-
-```
-帮我把这篇技术文章转换后上传到微信草稿箱
 ```
 
 ### 项目结构
