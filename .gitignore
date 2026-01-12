@@ -2,14 +2,8 @@
 /md2wechat
 /md2wechat.exe
 
-# Ignore all binaries
-*.exe
-*.dll
-*.so
-*.dylib
-
-# Ignore compiled binaries (download from releases instead)
-bin/
+# Ignore all binaries (anywhere in the repo)
+**/bin/
 *.exe
 *.dll
 *.so
