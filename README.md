@@ -388,12 +388,12 @@ flowchart LR
     K --> L[发送到草稿箱]
 
     classDef idea fill:#e3f2fd,stroke:#2196f3,color:#0d47a1
-    classDef style fill:#fff3e0,stroke:#ff9800,color:#e65100
+    classDef creator fill:#fff3e0,stroke:#ff9800,color:#e65100
     classDef ai fill:#f3e5f5,stroke:#9c27b0,color:#4a148c
     classDef output fill:#e8f5e9,stroke:#4caf50,color:#1b5e20
 
     class A idea
-    class B,C style
+    class B,C creator
     class D,E,G,I ai
     class H,J,K,L output
 ```
