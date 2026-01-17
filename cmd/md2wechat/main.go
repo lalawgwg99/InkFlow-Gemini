@@ -104,6 +104,7 @@ Examples:
 	rootCmd.AddCommand(downloadAndUploadCmd)
 
 	// generate_image command
+	var generateImageCmdSize string
 	var generateImageCmd = &cobra.Command{
 		Use:   "generate_image <prompt>",
 		Short: "Generate image via AI and upload to WeChat",
@@ -114,6 +115,18 @@ Examples:
 		Run: func(cmd *cobra.Command, args []string) {
 			prompt := args[0]
 			processor := image.NewProcessor(cfg, log)
+
+			// 如果指定了尺寸，临时覆盖配置
+			if generateImageCmdSize != "" {
+				result, err := processor.GenerateAndUploadWithSize(prompt, generateImageCmdSize)
+				if err != nil {
+					responseError(err)
+					return
+				}
+				responseSuccess(result)
+				return
+			}
+
 			result, err := processor.GenerateAndUpload(prompt)
 			if err != nil {
 				responseError(err)
@@ -122,6 +135,8 @@ Examples:
 			responseSuccess(result)
 		},
 	}
+	generateImageCmd.Flags().StringVar(&generateImageCmdSize, "size", "", "Image size (e.g., 2560x1440 for 16:9)")
+	generateImageCmd.Flags().StringVar(&generateImageCmdSize, "s", "", "Image size (shorthand)")
 	rootCmd.AddCommand(generateImageCmd)
 
 	// create_draft command
@@ -150,6 +165,9 @@ Examples:
 
 	// config command
 	rootCmd.AddCommand(configCmd)
+
+	// write command
+	rootCmd.AddCommand(writeCmd)
 
 	// test-draft command
 	rootCmd.AddCommand(testHTMLCmd)

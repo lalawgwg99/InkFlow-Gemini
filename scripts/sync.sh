@@ -40,6 +40,7 @@ FILES=(
     "references/html-guide.md"
     "references/image-syntax.md"
     "references/wechat-api.md"
+    "references/writing-guide.md"
 )
 
 # Sync each file

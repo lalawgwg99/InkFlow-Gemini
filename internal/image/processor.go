@@ -196,6 +196,65 @@ func (p *Processor) GenerateAndUpload(prompt string) (*GenerateAndUploadResult, 
 	}, nil
 }
 
+// GenerateAndUploadWithSize AI 生成指定尺寸的图片并上传
+func (p *Processor) GenerateAndUploadWithSize(prompt string, size string) (*GenerateAndUploadResult, error) {
+	p.log.Info("generating image via AI with size",
+		zap.String("prompt", prompt),
+		zap.String("size", size))
+
+	// 验证配置
+	if err := p.cfg.ValidateForImageGeneration(); err != nil {
+		return nil, err
+	}
+
+	// 检查 provider 是否可用
+	if p.provider == nil {
+		return nil, fmt.Errorf("图片生成服务未配置，请检查配置文件中的 api.image_provider 和 api.image_key")
+	}
+
+	// 创建一个临时配置副本，覆盖尺寸
+	originalSize := p.cfg.ImageSize
+	p.cfg.ImageSize = size
+	defer func() { p.cfg.ImageSize = originalSize }()
+
+	// 重新创建 provider 以使用新尺寸
+	newProvider, err := NewProvider(p.cfg)
+	if err != nil {
+		return nil, fmt.Errorf("create provider with size: %w", err)
+	}
+
+	// 调用图片生成 API
+	ctx := context.Background()
+	result, err := newProvider.Generate(ctx, prompt)
+	if err != nil {
+		return nil, fmt.Errorf("generate image: %w", err)
+	}
+	p.log.Info("image generated",
+		zap.String("url", result.URL),
+		zap.String("provider", result.Model),
+		zap.String("size", result.Size))
+
+	// 下载生成的图片
+	tmpPath, err := wechat.DownloadFile(result.URL)
+	if err != nil {
+		return nil, fmt.Errorf("download generated image: %w", err)
+	}
+	defer os.Remove(tmpPath)
+
+	// 上传到微信
+	uploadResult, err := p.ws.UploadMaterialWithRetry(tmpPath, 3)
+	if err != nil {
+		return nil, err
+	}
+
+	return &GenerateAndUploadResult{
+		Prompt:      prompt,
+		OriginalURL: result.URL,
+		MediaID:     uploadResult.MediaID,
+		WechatURL:   uploadResult.WechatURL,
+	}, nil
+}
+
 // GetImageInfo 获取图片信息
 func (p *Processor) GetImageInfo(filePath string) (*ImageInfo, error) {
 	return GetImageInfo(filePath)

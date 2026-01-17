@@ -9,6 +9,17 @@
 [![GitHub Release](https://img.shields.io/badge/download-latest-green)](https://github.com/geekjourneyx/md2wechat-skill/releases)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-purple)](#-claude-code-集成)
 
+---
+
+> ### ⚠️ 重要提示：API 模式需要 md2wechat.cn API 服务
+> **本工具使用 md2wechat.cn API 服务，使用 API 模式前需要先获取 API Key**
+>
+> - 📖 **API 文档**：https://www.md2wechat.cn/api-docs
+> - 📧 **联系获取**：通过 [官网](https://www.md2wechat.cn/api-docs) 联系获取 API Key
+> - 💡 **AI 模式**：不需要 API Key，直接使用 Claude 即可
+
+---
+
 [快速开始](#-5分钟快速上手) • [Claude Code](#-claude-code-集成) • [功能介绍](#-核心功能) • [使用说明](#-使用方法) • [常见问题](#-常见问题)
 
 ---
@@ -24,11 +35,7 @@
 
 然后直接对话：**"请用秋日暖光主题将 article.md 转换为微信公众号格式"**
 
----
-
 </div>
-
----
 
 ## ✨ 这是什么？
 
@@ -56,7 +63,7 @@ flowchart LR
     B -->|API 模式| C[调用 md2wechat.cn API]
     C --> D[获取 HTML]
 
-    B -->|AI 模式 推荐| E[Claude AI 生成 HTML]
+    B -->|AI 模式 ⭐| E[Claude AI 生成 HTML]
     E --> F[精美排版]
 
     D --> G[预览效果]
@@ -78,6 +85,27 @@ flowchart LR
     class J nodeJ
     class K nodeK
 ```
+
+### 三大核心功能
+
+| 功能 | 命令 | 说明 | 适合谁 |
+|------|------|------|--------|
+| **Markdown 转换** | `convert` | 将 Markdown 转换为微信格式 HTML | 所有用户 |
+| **风格写作** 🆕 | `write` | 用创作者风格辅助写作，自动生成文章和封面提示词 | 写作小白、内容创作者 |
+| **草稿推送** | `convert --draft` | 一键发送到微信草稿箱 | 需要频繁发布的用户 |
+
+**`write` 与 `convert` 的区别：**
+
+| 对比项 | `write` 命令 | `convert` 命令 |
+|--------|-------------|---------------|
+| **输入** | 一个想法/观点/片段 | 完整的 Markdown 文件 |
+| **输出** | 结构化提示词（AI 处理后生成文章） | 微信格式 HTML |
+| **用途** | 从零开始创作 | 格式转换已有内容 |
+| **封面** | 自动生成封面提示词 | 需要手动指定封面图 |
+
+**简单理解：**
+- `write` = 帮你写文章（从想法到完整文章）
+- `convert` = 帮你排版（从 Markdown 到微信格式）
 
 ### 两种转换模式
 
@@ -129,7 +157,7 @@ flowchart LR
 |----------|----------|----------|
 | 🪟 **Windows** | [下载 .exe](https://github.com/geekjourneyx/md2wechat-skill/releases/latest/download/md2wechat-windows-amd64.exe) | 任意文件夹（或 `C:\Windows\System32\`） |
 | 🍎 **Mac Intel 芯片** | [下载](https://github.com/geekjourneyx/md2wechat-skill/releases/latest/download/md2wechat-darwin-amd64) | `/usr/local/bin/` 或 `~/.local/bin/` |
-| 🍎 **Mac Apple Silicon (M1/M2/M3)** | [下载](https://github.com/geekjourneyx/md2wechat-skill/releases/latest/download/md2wechat-darwin-arm64) | `/usr/local/bin/` 或 `~/.local/bin/` |
+| 🍎 **Mac Apple Silicon (M1/M2/M3/M4)** | [下载](https://github.com/geekjourneyx/md2wechat-skill/releases/latest/download/md2wechat-darwin-arm64) | `/usr/local/bin/` 或 `~/.local/bin/` |
 | 🐧 **Linux (Intel/AMD)** | [下载](https://github.com/geekjourneyx/md2wechat-skill/releases/latest/download/md2wechat-linux-amd64) | `/usr/local/bin/` 或 `~/.local/bin/` |
 | 🐧 **Linux (ARM/树莓派)** | [下载](https://github.com/geekjourneyx/md2wechat-skill/releases/latest/download/md2wechat-linux-arm64) | `/usr/local/bin/` 或 `~/.local/bin/` |
 
@@ -287,6 +315,166 @@ md2wechat convert article.md -o output.html
 md2wechat convert article.md --mode ai --theme autumn-warm --preview
 ```
 
+### 风格写作 🆕
+
+```bash
+# 查看所有可用写作风格
+md2wechat write --list
+
+# 用 Dan Koe 风格写文章（交互模式）
+md2wechat write
+
+# 用指定风格写文章，从观点生成
+md2wechat write --style dan-koe
+
+# 润色现有文章
+md2wechat write --style dan-koe --input-type fragment article.md
+
+# 生成匹配的封面提示词
+md2wechat write --style dan-koe --cover-only
+
+# 同时生成文章和封面
+md2wechat write --style dan-koe --cover
+```
+
+**写作风格说明：**
+
+| 风格 | 特点 | 适合内容 |
+|------|------|----------|
+| **Dan Koe** | 深刻但不晦涩，犀利但不刻薄，有哲学深度但接地气 | 个人成长、观点文章、评论 |
+
+**如何添加自定义风格：**
+
+在 `writers/` 目录下创建 YAML 文件即可，格式参考 `writers/dan-koe.yaml`。
+
+### 风格写作工作原理
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                      风格写作 (write 命令)                           │
+│                                                                       │
+│  你只需要提供一个想法 → AI 自动生成符合特定创作者风格的文章            │
+│                                                                       │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+**核心概念：**
+
+| 概念 | 说明 | 示例 |
+|------|------|------|
+| **写作风格** | 特定创作者的写作 DNA，包括语气、结构、用词习惯 | Dan Koe：深刻犀利、接地气 |
+| **输入类型** | 你提供的内容类型 | 观点、片段、大纲、标题 |
+| **AI 模式** | 返回结构化提示词，由 Claude 等大模型生成内容 | 默认模式 |
+| **封面提示词** | 根据文章内容自动生成的配图提示 | 匹配写作风格 |
+
+**完整工作流程：**
+
+```mermaid
+flowchart LR
+    A[你提供想法] --> B{选择写作风格}
+    B --> C[构建结构化提示词]
+
+    C --> D{AI 处理}
+    D --> E[生成完整文章]
+
+    E --> F{需要封面?}
+    F -->|是| G[生成封面提示词]
+    F -->|否| H[输出文章]
+
+    G --> I[用 AI 生成封面图]
+    I --> J[上传到微信素材库]
+    H --> K[转换为微信格式]
+    J --> K
+    K --> L[发送到草稿箱]
+
+    classDef idea fill:#e3f2fd,stroke:#2196f3,color:#0d47a1
+    classDef style fill:#fff3e0,stroke:#ff9800,color:#e65100
+    classDef ai fill:#f3e5f5,stroke:#9c27b0,color:#4a148c
+    classDef output fill:#e8f5e9,stroke:#4caf50,color:#1b5e20
+
+    class A idea
+    class B,C style
+    class D,E,G,I ai
+    class H,J,K,L output
+```
+
+**输入类型说明：**
+
+| 输入类型 | 说明 | 示例 |
+|----------|------|------|
+| `idea` | 一个观点或想法 | "我觉得自律是个伪命题" |
+| `fragment` | 内容片段，需要润色扩展 | 现有的草稿或未完成的文章 |
+| `outline` | 文章大纲 | 有结构，需要填充内容 |
+| `title` | 仅标题，围绕标题写作 | "自律是个谎言" |
+
+**输出说明：**
+
+```bash
+# AI 模式输出（默认）
+{
+  "success": true,
+  "mode": "ai",
+  "action": "ai_write_request",
+  "style": "Dan Koe",
+  "prompt": "结构化的写作提示词..."
+}
+
+# 带封面的输出
+{
+  "success": true,
+  "prompt": "文章提示词...",
+  "cover_prompt": "封面提示词...",
+  "cover_explanation": "封面设计思路..."
+}
+```
+
+> 💡 **重要说明**：`write` 命令默认使用 **AI 模式**，返回的是结构化提示词，需要由 Claude 等 AI 大模型处理才能生成最终文章。在 Claude Code 中使用时，这个流程是自动的。
+
+**从想法到发布的完整流程：**
+
+```mermaid
+flowchart TB
+    subgraph Phase1["📝 阶段1：创作"]
+        A1[你的想法] --> A2[选择写作风格]
+        A2 --> A3[AI 生成文章]
+        A3 --> A4[生成封面提示词]
+    end
+
+    subgraph Phase2["🎨 阶段2：制作"]
+        B1[AI 生成封面图] --> B2[上传到微信素材库]
+        A4 --> B1
+        A3 --> B3[保存为 Markdown]
+    end
+
+    subgraph Phase3["📤 阶段3：发布"]
+        C1[转换为微信格式] --> C2[发送到草稿箱]
+        B2 --> C1
+        B3 --> C1
+        C2 --> C3[在微信编辑器中微调]
+        C3 --> C4[发布！]
+    end
+
+    classDef phase1 fill:#e3f2fd,stroke:#2196f3,color:#0d47a1
+    classDef phase2 fill:#fff3e0,stroke:#ff9800,color:#e65100
+    classDef phase3 fill:#e8f5e9,stroke:#4caf50,color:#1b5e20
+
+    class A1,A2,A3,A4 phase1
+    class B1,B2,B3 phase2
+    class C1,C2,C3,C4 phase3
+```
+
+**一条命令完成全流程（在 Claude Code 中）：**
+
+```
+"用 Dan Koe 风格写一篇关于 AI 时代程序员怎么搞钱的文章，生成封面，并发送到微信草稿箱"
+```
+
+Claude 会自动：
+1. 调用 `write` 命令生成文章和封面提示词
+2. 用 AI 生成封面图并上传
+3. 转换为微信格式
+4. 发送到草稿箱
+
 ### 完整发布流程
 
 ```bash
@@ -329,7 +517,12 @@ md2wechat download_and_upload https://example.com/image.jpg
 
 # AI 生成图片并上传（需要配置 IMAGE_API_KEY）
 md2wechat generate_image "A cute cat sitting on a windowsill"
+
+# 生成 16:9 比例的封面图（推荐，适配公众号封面）
+md2wechat generate_image --size 2560x1440 "prompt"
 ```
+
+> 💡 **公众号封面图建议**：使用 16:9 横向比例（2560x1440）作为文章封面，在微信 feed 流和文章列表中显示效果更好。方形图片（2048x2048）在预览时会被裁剪。
 
 #### AI 图片生成
 
@@ -442,7 +635,11 @@ md2wechat-skill/
 │   ├── draft/            # 草稿服务
 │   ├── image/            # 图片处理
 │   ├── wechat/           # 微信 API 封装
+│   ├── writer/           # 写作助手 🆕
 │   └── config/           # 配置管理
+├── writers/              # 写作风格配置 🆕
+│   ├── dan-koe.yaml      # Dan Koe 风格
+│   └── README.md         # 自定义风格指南
 ├── docs/                 # 详细文档
 │   ├── USAGE.md          # 使用教程
 │   ├── FAQ.md            # 常见问题
@@ -588,6 +785,19 @@ md2wechat convert announcement.md --mode ai --theme ocean-calm --draft --cover p
 md2wechat travel-diary.md --mode ai --theme spring-fresh --preview
 ```
 
+### 示例 4：写作小白用观点生成文章 🆕
+
+```bash
+# 交互模式：输入观点，AI 生成文章
+md2wechat write
+
+# 指定风格生成
+md2wechat write --style dan-koe
+
+# 生成封面提示词
+md2wechat write --style dan-koe --cover-only
+```
+
 ---
 
 ## ❓ 常见问题
@@ -650,6 +860,53 @@ curl -fsSL https://raw.githubusercontent.com/geekjourneyx/md2wechat-skill/main/s
 ```
 </details>
 
+<details>
+<summary><b>Q: 写作功能是什么？怎么用？</b></summary>
+
+**A:** 写作功能可以帮你用特定创作者风格生成文章：
+
+```bash
+# 查看所有可用风格
+md2wechat write --list
+
+# 交互式写作
+md2wechat write
+
+# 指定风格写作
+md2wechat write --style dan-koe
+```
+
+只需输入你的观点或想法，AI 会自动生成符合该风格的文章。
+</details>
+
+<details>
+<summary><b>Q: 我是写作小白，不会写文章能用吗？</b></summary>
+
+**A:** 完全可以！写作功能专为小白设计：
+
+1. **只需要输入观点**：比如"我觉得自律是个伪命题"
+2. **AI 自动扩展**：会自动生成结构完整的文章
+3. **多种风格可选**：内置 Dan Koe 等风格，也可以自定义
+
+不需要你会写作技巧，只需要有想法就行。
+</details>
+
+<details>
+<summary><b>Q: 如何添加我喜欢的作家风格？</b></summary>
+
+**A:** 在 `writers/` 目录下创建 YAML 文件：
+
+```bash
+# 参考内置风格
+cat writers/dan-koe.yaml
+
+# 创建自己的风格
+vim writers/my-style.yaml
+```
+
+详细格式参考 `writers/README.md`。
+</details>
+
 ---
 
 ## 📚 更多文档
@@ -658,6 +915,8 @@ curl -fsSL https://raw.githubusercontent.com/geekjourneyx/md2wechat-skill/main/s
 |------|------|
 | [新手入门指南](QUICKSTART.md) | **强烈推荐！** 详细的图文教程 |
 | [完整使用说明](docs/USAGE.md) | 所有命令和选项 |
+| [写作功能指南](writers/README.md) 🆕 | 如何使用和自定义写作风格 |
+| [写作功能问答](docs/WRITING_FAQ.md) 🆕 | 写作小白完整指南 |
 | [常见问题](docs/FAQ.md) | 20+ 常见问题解答 |
 | [故障排查](docs/TROUBLESHOOTING.md) | 遇到问题看这里 |
 
@@ -677,13 +936,27 @@ curl -fsSL https://raw.githubusercontent.com/geekjourneyx/md2wechat-skill/main/s
 
 ---
 
-## 👨‍💻 作者
+## 💰 打赏 Buy Me A Coffee
 
-**geekjourney** — 极客/创作者/AI 探索者
+如果该项目帮助了您，请作者喝杯咖啡吧 ☕️
 
-- 🌐 个人主页: [geekjourney.dev](https://geekjourney.dev)
-- 🐦 X/Twitter: [@seekjourney](https://x.com/seekjourney/)
-- 📱 公众号: **极客杰尼**
+### WeChat
+
+<img src="https://raw.githubusercontent.com/geekjourneyx/awesome-developer-go-sail/main/docs/assets/wechat-reward-code.jpg" alt="微信打赏码" width="200" />
+
+---
+
+## 🧑‍💻 作者
+
+- 作者：**geekjourneyx**
+- X（Twitter）：https://x.com/seekjourney
+- 公众号：极客杰尼
+
+关注公众号，获取更多 AI 编程、AI 工具与 AI 出海建站的实战分享：
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/geekjourneyx/awesome-developer-go-sail/main/docs/assets/qrcode.jpg" alt="公众号：极客杰尼" width="180" />
+</p>
 
 ---
 
@@ -693,6 +966,6 @@ curl -fsSL https://raw.githubusercontent.com/geekjourneyx/md2wechat-skill/main/s
 
 [主页](https://github.com/geekjourneyx/md2wechat-skill) • [文档](docs) • [反馈](https://github.com/geekjourneyx/md2wechat-skill/issues)
 
-Made with ❤️ by [geekjourney](https://geekjourney.dev)
+Made with ❤️ by [geekjourneyx](https://geekjourney.dev)
 
 </div>

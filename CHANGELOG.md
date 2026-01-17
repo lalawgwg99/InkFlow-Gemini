@@ -5,6 +5,60 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2025-01-17
+
+### Added
+- **Writer Style Assistant**: AI-powered writing assistance with customizable creator styles
+  - New `write` command for assisted article generation
+  - Support for multiple input types: idea, fragment, outline, title
+  - Automatic cover prompt generation matching writing style
+- **Dan Koe Style**: First built-in creator writing style
+  - Profound, sharp, grounded tone for personal growth and opinion pieces
+  - Complete writing framework with hooks, structures, and quote extraction
+  - Victorian Woodcut/Etching style cover generation
+- **Custom Style System**: YAML-based style definitions in `writers/` directory
+  - Easy to add custom creator styles
+  - Configurable writing prompts and cover styles
+- **Image Size Control**: New `--size` parameter for `generate_image` command
+  - Support for 16:9 ratio (2560x1440) for WeChat cover images
+  - Multiple preset sizes: 2048x2048, 1920x1920, 2560x1440, 1440x2560, etc.
+- **Documentation**:
+  - New `writers/README.md` with custom style guide
+  - New `docs/WRITING_FAQ.md` for writing beginners
+  - New `references/writing-guide.md` with complete write command reference
+  - Updated `references/image-syntax.md` with size parameter documentation
+  - Enhanced README.md with write command workflows and diagrams
+  - Enhanced SKILL.md with writing assistance natural language examples
+
+### Changed
+- README: Added API service notice at top with md2wechat.cn contact information
+- README: Updated author section with donation information and QR codes
+- README: Added writer style comparison table and workflow diagrams
+- SKILL.md: Improved LLM instruction following with explicit trigger conditions
+- Sync script: Added `writing-guide.md` to file synchronization list
+
+### Technical Details
+- **New Files**:
+  - `internal/writer/` - Writer style assistant module
+    - `types.go` - Core data structures
+    - `style.go` - Style management system
+    - `generator.go` - Article generation logic
+    - `assistant.go` - High-level assistant API
+    - `cover_generator.go` - Cover prompt generation
+  - `cmd/md2wechat/write.go` - Write command implementation
+  - `writers/dan-koe.yaml` - Dan Koe style configuration
+  - `writers/README.md` - Custom style guide
+  - `docs/WRITING_FAQ.md` - Writing functionality FAQ
+  - `skill/md2wechat/references/writing-guide.md` - Writing command reference
+
+### Breaking Changes
+- None
+
+### Migration Guide
+No migration required. The write command is a new feature and doesn't affect existing functionality.
+
+---
+
 ## [1.4.0] - 2025-01-14
 
 ### Added
@@ -160,6 +214,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Description |
 |---------|------|-------------|
+| [1.5.0] | 2025-01-17 | Writer style assistant, Dan Koe style, image size control |
+| [1.4.0] | 2025-01-14 | TuZi image provider, natural language image generation |
 | [1.3.1] | 2025-01-12 | Auto binary download, user-friendly errors, system dependencies |
 | [1.3.0] | 2025-01-11 | Plugin Marketplace support, enhanced installation docs |
 | [1.2.0] | 2025-01-11 | Claude Code plugin support, new API themes |
