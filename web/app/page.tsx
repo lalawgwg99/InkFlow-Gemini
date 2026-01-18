@@ -5,10 +5,11 @@ import ApiKeyModal from "@/components/ApiKeyModal";
 import IdeaGenerator from "@/components/IdeaGenerator";
 import Writer from "@/components/Writer";
 import { StyleConfig, STYLES } from "@/lib/styles";
-import { BookOpen, Sparkles } from "lucide-react";
+import { BookOpen, Sparkles, Settings } from "lucide-react";
 
 export default function Home() {
   const [apiKey, setApiKey] = useState("");
+  const [showApiModal, setShowApiModal] = useState(false);
   const [activeTab, setActiveTab] = useState<"idea" | "write">("idea");
 
   // State for Writer
@@ -21,16 +22,29 @@ export default function Home() {
     setActiveTab("write");
   };
 
+  const handleResetApiKey = () => {
+    localStorage.removeItem("GEMINI_API_KEY");
+    setApiKey("");
+    setShowApiModal(true);
+  };
+
   return (
     <main className="min-h-screen bg-black text-gray-100 flex flex-col items-center p-4 md:p-8 relative overflow-hidden">
       {/* Background Decoration */}
       <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-purple-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 -translate-x-1/2 -translate-y-1/2 animate-blob pointer-events-none"></div>
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 translate-x-1/2 -translate-y-1/2 animate-blob pointer-events-none animation-delay-2000"></div>
 
-      <ApiKeyModal onSave={setApiKey} />
+      <ApiKeyModal onSave={setApiKey} forceShow={showApiModal} onClose={() => setShowApiModal(false)} />
 
       {/* Header */}
-      <header className="mb-12 text-center z-10">
+      <header className="mb-12 text-center z-10 relative">
+        <button
+          onClick={handleResetApiKey}
+          className="absolute top-0 right-0 p-2 text-gray-400 hover:text-white transition rounded-lg hover:bg-white/10"
+          title="重新設定 API Key"
+        >
+          <Settings className="w-5 h-5" />
+        </button>
         <h1 className="text-4xl md:text-6xl font-black mb-4 tracking-tight">
           InkFlow<span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">.AI</span>
         </h1>
@@ -45,8 +59,8 @@ export default function Home() {
         <button
           onClick={() => setActiveTab("idea")}
           className={`px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition-all ${activeTab === "idea"
-              ? "bg-gray-800 text-white shadow-lg border border-gray-700"
-              : "text-gray-400 hover:text-gray-200"
+            ? "bg-gray-800 text-white shadow-lg border border-gray-700"
+            : "text-gray-400 hover:text-gray-200"
             }`}
         >
           <Sparkles className={`w-4 h-4 ${activeTab === "idea" ? "text-yellow-400" : ""}`} />
@@ -55,8 +69,8 @@ export default function Home() {
         <button
           onClick={() => setActiveTab("write")}
           className={`px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition-all ${activeTab === "write"
-              ? "bg-gray-800 text-white shadow-lg border border-gray-700"
-              : "text-gray-400 hover:text-gray-200"
+            ? "bg-gray-800 text-white shadow-lg border border-gray-700"
+            : "text-gray-400 hover:text-gray-200"
             }`}
         >
           <BookOpen className={`w-4 h-4 ${activeTab === "write" ? "text-purple-400" : ""}`} />

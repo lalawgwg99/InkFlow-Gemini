@@ -3,11 +3,23 @@
 import { useState, useEffect } from "react";
 import { Key, Lock } from "lucide-react";
 
-export default function ApiKeyModal({ onSave }: { onSave: (key: string) => void }) {
+export default function ApiKeyModal({
+    onSave,
+    forceShow = false,
+    onClose
+}: {
+    onSave: (key: string) => void;
+    forceShow?: boolean;
+    onClose?: () => void;
+}) {
     const [apiKey, setApiKey] = useState("");
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
+        if (forceShow) {
+            setIsOpen(true);
+            return;
+        }
         const key = localStorage.getItem("GEMINI_API_KEY");
         if (!key) {
             const timer = setTimeout(() => setIsOpen(true), 0);
@@ -17,13 +29,14 @@ export default function ApiKeyModal({ onSave }: { onSave: (key: string) => void 
             const timer = setTimeout(() => onSave(key), 0);
             return () => clearTimeout(timer);
         }
-    }, [onSave]);
+    }, [onSave, forceShow]);
 
     const handleSave = () => {
         if (apiKey.trim().length > 10) {
             localStorage.setItem("GEMINI_API_KEY", apiKey);
             onSave(apiKey);
             setIsOpen(false);
+            onClose?.();
         } else {
             alert("請輸入有效的 Gemini API Key");
         }
