@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 
+	"strings"
+	
 	"github.com/geekjourneyx/md2wechat-skill/internal/converter"
 	"github.com/geekjourneyx/md2wechat-skill/internal/draft"
 	"github.com/geekjourneyx/md2wechat-skill/internal/image"
@@ -16,16 +18,19 @@ import (
 // convertCmd convert 命令
 var convertCmd = &cobra.Command{
 	Use:   "convert <markdown_file>",
-	Short: "Convert Markdown to WeChat HTML",
-	Long: `Convert Markdown article to WeChat Official Account formatted HTML.
+	Short: "將 Markdown 轉換為社群貼文格式 (HTML/Thread)",
+	Long: `SocialContent-AI: 將 Markdown 文章轉換為適合 IG、FB、X (Twitter) 的格式。
 
-Supports two conversion modes:
-  - api: Use md2wechat.cn API (stable, requires API key)
-  - ai:  Use Claude AI to generate HTML (flexible, requires AI)
+支援的轉換模式 (Mode):
+  - api:    使用 md2wechat.cn API (穩定的公眾號 HTML 轉換)
+  - ai:     使用 Gemini/Claude AI 生成內容與 HTML (推薦)
+  - thread: 生成 X (Twitter) 貼文串結構 (自動斷句編號)
+  - card:   生成 IG/FB 圖片卡片 HTML (可用於截圖發文)
 
-Supported themes:
-  API modes: default, bytedance, apple, sports, chinese, cyber
-  AI modes: autumn-warm, spring-fresh, ocean-calm, custom`,
+支援的主題 (Theme):
+  API 模式: default, bytedance, apple, sports, chinese, cyber
+  AI 模式: autumn-warm (秋日), spring-fresh (春日), ocean-calm (深海), custom
+  社群模式: magazine-dark (黑金雜誌), minimalist-gray (極簡灰調), tech-neon (賽博霓虹)`,
 	Args: cobra.ExactArgs(1),
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		return initConfig()
@@ -54,27 +59,28 @@ var (
 
 func init() {
 	// 添加 flags
-	convertCmd.Flags().StringVar(&convertMode, "mode", "api", "Conversion mode: api or ai")
-	convertCmd.Flags().StringVar(&convertTheme, "theme", "default", "Theme name")
-	convertCmd.Flags().StringVar(&convertAPIKey, "api-key", "", "API key for md2wechat.cn")
-	convertCmd.Flags().StringVar(&convertFontSize, "font-size", "medium", "Font size: small/medium/large (API mode only)")
-	convertCmd.Flags().StringVar(&convertCustomPrompt, "custom-prompt", "", "Custom AI prompt (AI mode only)")
-	convertCmd.Flags().StringVarP(&convertOutput, "output", "o", "", "Output HTML file path")
-	convertCmd.Flags().BoolVar(&convertPreview, "preview", false, "Preview only, do not upload images")
-	convertCmd.Flags().BoolVar(&convertUpload, "upload", false, "Upload images to WeChat and replace URLs")
-	convertCmd.Flags().BoolVar(&convertDraft, "draft", false, "Create WeChat draft after conversion")
-	convertCmd.Flags().StringVar(&convertSaveDraft, "save-draft", "", "Save draft JSON to file")
-	convertCmd.Flags().StringVar(&convertCoverImage, "cover", "", "Cover image path for draft (required when using --draft)")
+	// 添加 flags
+	convertCmd.Flags().StringVar(&convertMode, "mode", "api", "轉換模式: api, ai, thread, card")
+	convertCmd.Flags().StringVar(&convertTheme, "theme", "default", "主題名稱")
+	convertCmd.Flags().StringVar(&convertAPIKey, "api-key", "", "md2wechat.cn API Key (僅 API 模式需要)")
+	convertCmd.Flags().StringVar(&convertFontSize, "font-size", "medium", "字體大小: small/medium/large (僅 API 模式)")
+	convertCmd.Flags().StringVar(&convertCustomPrompt, "custom-prompt", "", "自定義 AI 提示詞 (僅 AI 模式)")
+	convertCmd.Flags().StringVarP(&convertOutput, "output", "o", "", "輸出檔案路徑")
+	convertCmd.Flags().BoolVar(&convertPreview, "preview", false, "僅預覽，不進行圖片上傳")
+	convertCmd.Flags().BoolVar(&convertUpload, "upload", false, "上傳圖片並替換網址 (微信模式)")
+	convertCmd.Flags().BoolVar(&convertDraft, "draft", false, "轉換後直接建立微信草稿")
+	convertCmd.Flags().StringVar(&convertSaveDraft, "save-draft", "", "保存草稿 JSON 到文件")
+	convertCmd.Flags().StringVar(&convertCoverImage, "cover", "", "草稿封面圖片路徑 (使用 --draft 時必填)")
 }
 
 // runConvert 执行转换
 func runConvert(cmd *cobra.Command, args []string) error {
 	markdownFile := args[0]
 
-	log.Info("starting conversion",
-		zap.String("file", markdownFile),
-		zap.String("mode", convertMode),
-		zap.String("theme", convertTheme))
+	log.Info("開始轉換...",
+		zap.String("檔案", markdownFile),
+		zap.String("模式", convertMode),
+		zap.String("主題", convertTheme))
 
 	// 读取 Markdown 文件
 	markdown, err := os.ReadFile(markdownFile)
@@ -102,10 +108,10 @@ func runConvert(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("conversion failed: %s", result.Error)
 	}
 
-	log.Info("conversion completed",
-		zap.String("mode", string(result.Mode)),
-		zap.String("theme", result.Theme),
-		zap.Int("image_count", len(result.Images)))
+	log.Info("轉換成功！",
+		zap.String("模式", string(result.Mode)),
+		zap.String("主題", result.Theme),
+		zap.Int("圖片數量", len(result.Images)))
 
 	// 根据模式处理结果
 	if convertMode == "ai" && converter.IsAIRequest(result) {
@@ -113,10 +119,15 @@ func runConvert(cmd *cobra.Command, args []string) error {
 		return handleAIResult(result, markdownFile)
 	}
 
-	// 处理图片
+	// 處理 Social 模式結果
+	if convertMode == "thread" || convertMode == "card" {
+		return handleSocialResult(result, markdownFile)
+	}
+
+	// 處理圖片
 	if convertUpload || convertDraft {
 		if err := processImages(result); err != nil {
-			log.Warn("image processing failed", zap.Error(err))
+			log.Warn("圖片處理部分失敗", zap.Error(err))
 		}
 	}
 
@@ -172,10 +183,41 @@ func handleAIResult(result *converter.ConvertResult, markdownFile string) error 
 	return nil
 }
 
+// handleSocialResult 處理 Social 模式結果
+func handleSocialResult(result *converter.ConvertResult, markdownFile string) error {
+	if result.Mode == converter.ModeThread {
+		// 輸出 Thread 結構
+		fmt.Printf("\n=== X (Twitter) 貼文串預覽 (%d 則貼文) ===\n\n", len(result.ThreadTweets))
+		for _, t := range result.ThreadTweets {
+			fmt.Println(t)
+			fmt.Println("\n---")
+		}
+		
+		if convertOutput != "" {
+			// 保存為 JSON 或純文本
+			content := strings.Join(result.ThreadTweets, "\n\n---\n\n")
+			if err := os.WriteFile(convertOutput, []byte(content), 0644); err != nil {
+				log.Error("儲存貼文串失敗", zap.Error(err))
+			} else {
+				log.Info("貼文串已儲存", zap.String("檔案", convertOutput))
+			}
+		}
+		return nil
+	}
+
+	if result.Mode == converter.ModeCard {
+		// 輸出 HTML
+		outputHTML(result.CardHTML, convertOutput, convertPreview)
+		return nil
+	}
+
+	return nil
+}
+
 // processImages 处理图片上传
 func processImages(result *converter.ConvertResult) error {
 	if len(result.Images) == 0 {
-		log.Info("no images to process")
+		log.Info("沒有圖片需要處理")
 		return nil
 	}
 

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/geekjourneyx/md2wechat-skill/internal/config"
+	"github.com/geekjourneyx/md2wechat-skill/internal/converter/social"
 	"go.uber.org/zap"
 )
 
@@ -14,8 +15,10 @@ import (
 type ConvertMode string
 
 const (
-	ModeAPI ConvertMode = "api" // API 模式：调用 md2wechat.cn
-	ModeAI  ConvertMode = "ai"  // AI 模式：通过 Claude 生成
+	ModeAPI    ConvertMode = "api"    // API 模式：调用 md2wechat.cn
+	ModeAI     ConvertMode = "ai"     // AI 模式：通过 Claude/Gemini 生成
+	ModeThread ConvertMode = "thread" // Twitter Thread 模式
+	ModeCard   ConvertMode = "card"   // IG/FB Card 模式
 )
 
 // ImageType 图片类型
@@ -60,6 +63,10 @@ type ConvertResult struct {
 	Images  []ImageRef  // 图片引用列表
 	Success bool        // 是否成功
 	Error   string      // 错误信息
+
+	// Social 模式輸出
+	ThreadTweets []string // X (Twitter) 貼文串
+	CardHTML     string   // IG/FB 卡片 HTML
 }
 
 // Converter 转换器接口
@@ -109,11 +116,47 @@ func (c *converter) Convert(req *ConvertRequest) *ConvertResult {
 		return c.convertViaAPI(req)
 	case ModeAI:
 		return c.convertViaAI(req)
+	case ModeThread:
+		return c.convertViaThread(req)
+	case ModeCard:
+		return c.convertViaCard(req)
 	default:
 		result.Success = false
 		result.Error = "unsupported convert mode: " + string(req.Mode)
 		return result
 	}
+}
+
+// convertViaThread 轉換為貼文串
+func (c *converter) convertViaThread(req *ConvertRequest) *ConvertResult {
+	gen := social.NewThreadGenerator()
+	tweets := gen.GenerateThread(req.Markdown)
+	
+	return &ConvertResult{
+		Mode:         ModeThread,
+		Success:      true,
+		ThreadTweets: tweets,
+	}
+}
+
+// convertViaCard 轉換為圖片卡片
+func (c *converter) convertViaCard(req *ConvertRequest) *ConvertResult {
+	gen := social.NewCardGenerator()
+	html, err := gen.GenerateHTML(req.Markdown, req.Theme)
+	
+	result := &ConvertResult{
+		Mode:    ModeCard,
+		Theme:   req.Theme,
+		Success: err == nil,
+	}
+
+	if err != nil {
+		result.Error = err.Error()
+	} else {
+		result.CardHTML = html
+	}
+	
+	return result
 }
 
 // validateRequest 验证请求参数

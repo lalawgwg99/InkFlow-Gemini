@@ -94,13 +94,13 @@ func LoadWithDefaults(configPath string) (*Config, error) {
 	}
 	if configPath != "" {
 		if err := loadFromFile(cfg, configPath); err != nil {
-			// 配置文件加载失败不是致命错误，继续使用环境变量和默认值
-			fmt.Fprintf(os.Stderr, "⚠️  警告: 配置文件加载失败 (%v)，将使用环境变量或默认值\n", err)
+			// 配置文件加載失敗不是致命錯誤，繼續使用環境變數和預設值
+			fmt.Fprintf(os.Stderr, "⚠️  注意: 設定檔載入失敗 (%v)，將使用預設值或環境變數\n", err)
 		} else {
 			cfg.configFile = configPath
-			// 显示正在使用的配置文件
+			// 顯示正在使用的配置文件
 			relPath := getRelativePath(configPath)
-			fmt.Fprintf(os.Stderr, "✅ 使用配置文件: %s\n", relPath)
+			fmt.Fprintf(os.Stderr, "✅ 使用設定檔: %s\n", relPath)
 		}
 	}
 
@@ -330,47 +330,53 @@ func (c *Config) Validate() error {
 	if c.WechatAppID == "" {
 		return &ConfigError{
 			Field:   "WechatAppID",
-			Message: "微信公众号 AppID 未配置",
-			Hint:    "运行 'md2wechat config init' 生成配置文件，然后填入 AppID",
+			Message: "微信公眾號 AppID 未設定 (若僅使用 Social 模式可忽略)",
+			Hint:    "執行 'md2wechat config init' 產生設定檔，然後填入 AppID，或使用環境變數",
 		}
 	}
 	if c.WechatSecret == "" {
 		return &ConfigError{
 			Field:   "WechatSecret",
-			Message: "微信公众号 Secret 未配置",
-			Hint:    "登录微信公众平台 > 设置与开发 > 基本配置 > 获取 Secret",
+			Message: "微信公眾號 Secret 未設定",
+			Hint:    "請至微信公眾平台 > 設置與開發 > 基本配置 > 獲取 Secret",
 		}
 	}
 
-	// 验证转换模式
-	if c.DefaultConvertMode != "api" && c.DefaultConvertMode != "ai" {
+	// 驗證轉換模式
+	validModes := map[string]bool{
+		"api":    true,
+		"ai":     true,
+		"thread": true,
+		"card":   true,
+	}
+	if !validModes[c.DefaultConvertMode] {
 		return &ConfigError{
 			Field:   "ConvertMode",
-			Message: "转换模式必须是 'api' 或 'ai'",
-			Hint:    "配置文件中设置 api.convert_mode: api",
+			Message: "轉換模式無效，必須是: api, ai, thread, card",
+			Hint:    "請檢查設定檔中的 api.convert_mode",
 		}
 	}
 
-	// 验证数值范围
+	// 驗證數值範圍
 	if c.MaxImageWidth < 100 || c.MaxImageWidth > 10000 {
 		return &ConfigError{
 			Field:   "MaxImageWidth",
-			Message: "图片最大宽度必须在 100 到 10000 之间",
-			Hint:    "配置文件中设置 image.max_width: 1920",
+			Message: "圖片最大寬度必須在 100 到 10000 之間",
+			Hint:    "請檢查 image.max_width 設定 (預設: 1920)",
 		}
 	}
 	if c.MaxImageSize < 1024*100 { // 最小 100KB
 		return &ConfigError{
 			Field:   "MaxImageSize",
-			Message: "图片最大大小不能小于 100KB",
-			Hint:    "配置文件中设置 image.max_size_mb: 5",
+			Message: "圖片最大容量不能小於 100KB",
+			Hint:    "請檢查 image.max_size_mb 設定 (預設: 5)",
 		}
 	}
 	if c.HTTPTimeout < 1 || c.HTTPTimeout > 300 {
 		return &ConfigError{
 			Field:   "HTTPTimeout",
-			Message: "超时时间必须在 1 到 300 秒之间",
-			Hint:    "配置文件中设置 api.http_timeout: 30",
+			Message: "連線逾時必須在 1 到 300 秒之間",
+			Hint:    "請檢查 api.http_timeout 設定 (預設: 30)",
 		}
 	}
 
@@ -388,7 +394,7 @@ func (c *Config) ValidateForImageGeneration() error {
 // ValidateForAPIConversion 验证 API 转换配置
 func (c *Config) ValidateForAPIConversion() error {
 	if c.MD2WechatAPIKey == "" && c.DefaultConvertMode == "api" {
-		return &ConfigError{Field: "MD2WechatAPIKey", Message: "MD2WECHAT_API_KEY is required for API mode"}
+		return &ConfigError{Field: "MD2WechatAPIKey", Message: "使用 API 模式需要設定 MD2WECHAT_API_KEY"}
 	}
 	return nil
 }

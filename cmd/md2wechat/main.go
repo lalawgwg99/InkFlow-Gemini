@@ -40,23 +40,22 @@ func initConfig() error {
 func main() {
 	var rootCmd = &cobra.Command{
 		Use:   "md2wechat",
-		Short: "Markdown to WeChat Official Account converter",
-		Long: `md2wechat converts Markdown articles to WeChat Official Account format
-and supports uploading materials and creating drafts.
+		Short: "社群內容生成神器 (SocialContent-AI)",
+		Long: `SocialContent-AI (原 md2wechat): 專為台灣社群經營者設計的內容生成工具。
+將 Markdown 文章一鍵轉換為 IG/FB 爆款卡片、X 貼文串，或微信公眾號格式。
 
-Environment Variables:
-  WECHAT_APPID                   WeChat Official Account AppID (required)
-  WECHAT_SECRET                  WeChat API Secret (required)
-  IMAGE_API_KEY                  Image generation API key (for AI images)
-  IMAGE_API_BASE                 Image API base URL (default: https://api.openai.com/v1)
-  COMPRESS_IMAGES                Compress images > 1920px (default: true)
-  MAX_IMAGE_WIDTH                Max image width in pixels (default: 1920)
+環境變數 (Environment Variables):
+  GEMINI_API_KEY                 Google Gemini API Key (推薦使用)
+  WECHAT_APPID                   微信公眾號 AppID (僅微信模式需要)
+  WECHAT_SECRET                  微信 API Secret (僅微信模式需要)
+  IMAGE_API_KEY                  圖片生成 API Key (如 OpenAI DALL-E)
+  COMPRESS_IMAGES                自動壓縮過大圖片 (預設: true)
 
-Examples:
-  md2wechat upload_image ./photo.jpg
-  md2wechat download_and_upload https://example.com/image.jpg
-  md2wechat generate_image "A cute cat"
-  md2wechat create_draft draft.json`,
+範例:
+  md2wechat convert post.md --mode card --theme magazine-dark  (製作 IG 卡片)
+  md2wechat convert thought.md --mode thread                   (製作 X 貼文串)
+  md2wechat upload_image ./photo.jpg                           (上傳素材)
+  md2wechat generate_image "一隻在寫程式的貓"                  (AI 生圖)`,
 		SilenceErrors: true,
 		SilenceUsage:  true,
 	}
@@ -64,7 +63,7 @@ Examples:
 	// upload_image command
 	var uploadImageCmd = &cobra.Command{
 		Use:   "upload_image <file_path>",
-		Short: "Upload local image to WeChat material library",
+		Short: "上傳本地圖片到素材庫 (微信模式)",
 		Args:  cobra.ExactArgs(1),
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			return initConfig()
@@ -85,7 +84,7 @@ Examples:
 	// download_and_upload command
 	var downloadAndUploadCmd = &cobra.Command{
 		Use:   "download_and_upload <url>",
-		Short: "Download online image and upload to WeChat",
+		Short: "下載網路圖片並上傳",
 		Args:  cobra.ExactArgs(1),
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			return initConfig()
@@ -107,7 +106,7 @@ Examples:
 	var generateImageCmdSize string
 	var generateImageCmd = &cobra.Command{
 		Use:   "generate_image <prompt>",
-		Short: "Generate image via AI and upload to WeChat",
+		Short: "使用 AI 生成圖片並上傳",
 		Args:  cobra.ExactArgs(1),
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			return initConfig()
@@ -135,14 +134,14 @@ Examples:
 			responseSuccess(result)
 		},
 	}
-	generateImageCmd.Flags().StringVar(&generateImageCmdSize, "size", "", "Image size (e.g., 2560x1440 for 16:9)")
-	generateImageCmd.Flags().StringVar(&generateImageCmdSize, "s", "", "Image size (shorthand)")
+	generateImageCmd.Flags().StringVar(&generateImageCmdSize, "size", "", "圖片尺寸 (例如: 2560x1440)")
+	generateImageCmd.Flags().StringVar(&generateImageCmdSize, "s", "", "圖片尺寸 (簡寫)")
 	rootCmd.AddCommand(generateImageCmd)
 
 	// create_draft command
 	var createDraftCmd = &cobra.Command{
 		Use:   "create_draft <json_file>",
-		Short: "Create WeChat draft article from JSON file",
+		Short: "從 JSON 建立草稿 (進階)",
 		Args:  cobra.ExactArgs(1),
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			return initConfig()

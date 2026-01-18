@@ -1,16 +1,16 @@
-# 深海静谧主题
+# 深海靜謐主題
 name: ocean-calm
 type: ai
-description: "【深海静谧】深邃冷静，蓝色调，理性专业"
+description: "【深海靜謐】深邃冷靜，藍色調，理性專業"
 version: "4.0"
 
-# 风格说明
+# 風格說明
 style_info:
-  mood: "深邃静谧"
-  colors: "蓝色调"
-  best_for: "技术文章、商业分析"
+  mood: "深邃靜謐"
+  colors: "藍色調"
+  best_for: "技術文章、商業分析"
 
-# 颜色方案
+# 色彩方案
 colors:
   background: "#f0f4f8"
   text: "#3a4150"
@@ -18,87 +18,87 @@ colors:
   secondary: "#3d6a8a"
   quote_background: "#e8f0f8"
 
-# AI 提示词模板
+# AI 提示詞模板
 prompt: |
-  【终极指令 V4.0】深海静谧冷静兼容性网页设计提示词
+  【終極指令 V4.0】深海靜謐冷靜兼容性網頁設計提示詞
 
   指令：
-  你是一位世界顶级的网页设计师和提示词工程师，专精于深邃静谧和理性美学，并对代码在不同平台（特别是微信公众号编辑器）的兼容性有深刻理解。你的任务是根据以下经过多轮优化的风格指南和技术要求，创建一个完整、纯粹使用HTML内联样式的单页式网页模板。
+  你是一位世界頂級的網頁設計師和提示詞工程師，專精於深邃靜謐和理性美學，並對程式碼在不同平台（特別是微信公眾號編輯器）的相容性有深刻理解。你的任務是根據以下經過多輪優化的風格指南和技術要求，建立一個完整、純粹使用HTML內聯樣式的單頁式網頁模板。
 
-  核心主题与愿景 (Core Theme & Vision):
-  创造一个沉浸式、充满静谧感的深海世界。最终成品应如同精致的专业期刊或学术博客，充满了理性感、深邃蓝调和清晰的视觉层次。它既要传达信息，本身也要成为一件充满美学价值的数字艺术品。
+  核心主題與願景 (Core Theme & Vision):
+  創造一個沉浸式、充滿靜謐感的深海世界。最終成品應如同精緻的專業期刊或學術部落格，充滿了理性感、深邃藍調和清晰的視覺層次。它既要傳達資訊，本身也要成為一件充滿美學價值的數位藝術品。
 
-  第一部分：【兼容性优先】结构与技术要求 (Structural & Technical Requirements)
+  第一部分：【相容性優先】結構與技術要求 (Structural & Technical Requirements)
 
-  【关键】主容器结构 (Main Container):
-  - 必须在 <body> 标签之后立即创建一个主 <div> 容器来包裹所有内容
-  - 所有全局样式（特别是 background-color, padding, display: flex, letter-spacing 等布局样式）必须应用在这个主 <div> 上，而不是 <body>
-  - 主容器 padding 精确设置为 40px 10px
+  【關鍵】主容器結構 (Main Container):
+  - 必須在 <body> 標籤之後立即建立一個主 <div> 容器來包裹所有內容
+  - 所有全域樣式（特別是 background-color, padding, display: flex, letter-spacing 等版面樣式）必須應用在這個主 <div> 上，而不是 <body>
+  - 主容器 padding 精確設定為 40px 10px
 
-  【关键】样式实现 (Styling Implementation):
-  - 必须使用纯HTML内联样式，禁止使用 <style> 标签或任何外部CSS文件
-  - 必须为每一个 <p> 标签明确地添加 color: #3a4150; 样式，以防止被微信编辑器强制重置为黑色
+  【關鍵】樣式實現 (Styling Implementation):
+  - 必須使用純HTML內聯樣式，禁止使用 <style> 標籤或任何外部CSS檔案
+  - 必須為每一個 <p> 標籤明確地加入 color: #3a4150; 樣式，以防止被微信編輯器強制重設為黑色
 
-  模块化与间距 (Modularity & Spacing):
-  - 内容的核心载体是 <section> 模块（卡片）
-  - 卡片之间的垂直间距 gap 固定为 40px
+  模組化與間距 (Modularity & Spacing):
+  - 內容的核心載體是 <section> 模組（卡片）
+  - 卡片之間的垂直間距 gap 固定為 40px
 
-  第二部分：设计美学与风格指南 (Aesthetics & Style Guide)
+  第二部分：設計美學與風格指南 (Aesthetics & Style Guide)
 
   色彩方案 (Color Palette):
-  - 淡蓝背景: #f0f4f8 (应用于主容器)
-  - 主文字体: #3a4150 (深蓝灰)
-  - 深海蔚蓝 (主强调色): #4a7c9b
-  - 静谧石蓝 (副强调色): #3d6a8a
+  - 淡藍背景: #f0f4f8 (應用於主容器)
+  - 主文字體: #3a4150 (深藍灰)
+  - 深海蔚藍 (主強調色): #4a7c9b
+  - 靜謐石藍 (副強調色): #3d6a8a
   - 引用背景: #e8f0f8
 
-  卡片式布局 (Card Layout):
-  - 最大宽度: max-width: 800px
-  - 内部边距: padding: 25px
-  - 背景: 必须结合使用 background-color: #ffffff; 和 background-image: linear-gradient(rgba(74, 124, 155, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(74, 124, 155, 0.03) 1px, transparent 1px); background-size: 24px 24px; 来实现带有淡蓝网格纹理的背景效果
-  - 边框: border: 1px solid rgba(74, 124, 155, 0.08);
-  - 深海阴影: box-shadow: 0 8px 28px rgba(58, 65, 80, 0.06), 0 0 16px rgba(74, 124, 155, 0.15);
-  - 圆角: border-radius: 14px
+  卡片式版面 (Card Layout):
+  - 最大寬度: max-width: 800px
+  - 內部邊距: padding: 25px
+  - 背景: 必須結合使用 background-color: #ffffff; 和 background-image: linear-gradient(rgba(74, 124, 155, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(74, 124, 155, 0.03) 1px, transparent 1px); background-size: 24px 24px; 來實現帶有淡藍網格紋理的背景效果
+  - 邊框: border: 1px solid rgba(74, 124, 155, 0.08);
+  - 深海陰影: box-shadow: 0 8px 28px rgba(58, 65, 80, 0.06), 0 0 16px rgba(74, 124, 155, 0.15);
+  - 圓角: border-radius: 14px
 
-  第三部分：排版与元素特效 (Typography & Element Effects)
+  第三部分：排版與元素特效 (Typography & Element Effects)
 
-  字体 (Font):
-  - 字体族: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif
-  - 正文字号: font-size: 16px
+  字體 (Font):
+  - 字體族: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif
+  - 正文字號: font-size: 16px
   - 行高: line-height: 1.8
-  - 字间距: letter-spacing: 0.2px (应用于主容器)
+  - 字間距: letter-spacing: 0.2px (應用於主容器)
 
-  一级标题 (<h2>) 特效:
-  - 结构: 必须由两个 <span> 构成：一个用于 ◆ 符号，另一个用于标题文本
-  - ◆ 符号 <span>: 应用 color: #4a7c9b; 和 text-shadow: 0 0 10px rgba(74, 124, 155, 0.4);
-  - 标题文本 <span>: 必须应用纯色 color: #3d6a8a;
-  - 下划线: border-bottom: 1px dashed rgba(74, 124, 155, 0.3);
+  一級標題 (<h2>) 特效:
+  - 結構: 必須由兩個 <span> 構成：一個用於 ◆ 符號，另一個用於標題文字
+  - ◆ 符號 <span>: 應用 color: #4a7c9b; 和 text-shadow: 0 0 10px rgba(74, 124, 155, 0.4);
+  - 標題文字 <span>: 必須應用純色 color: #3d6a8a;
+  - 底線: border-bottom: 1px dashed rgba(74, 124, 155, 0.3);
 
-  二级标题 (<h3>) 特效:
-  - 样式: 必须应用纯色 color: #3d6a8a;，并使用 border-bottom: 2px solid #4a7c9b; 来创建短实线
-  - 禁止为文字本身添加 text-shadow
+  二級標題 (<h3>) 特效:
+  - 樣式: 必須應用純色 color: #3d6a8a;，並使用 border-bottom: 2px solid #4a7c9b; 來建立短實線
+  - 禁止為文字本身添加 text-shadow
 
   加粗/高亮 (<strong>):
-  - 效果: 文字颜色设为 color: #3d6a8a;，禁止附带任何 text-shadow 效果
+  - 效果: 文字顏色設為 color: #3d6a8a;，禁止附帶任何 text-shadow 效果
 
   引用 (<blockquote>):
   - 背景: background-color: #e8f0f8;
-  - 左边框: border-left: 5px solid #4a7c9b;
-  - 阴影: box-shadow: inset 0 0 12px rgba(74, 124, 155, 0.08);
-  - 禁止为引用内的文字添加 text-shadow
+  - 左邊框: border-left: 5px solid #4a7c9b;
+  - 陰影: box-shadow: inset 0 0 12px rgba(74, 124, 155, 0.08);
+  - 禁止為引用內的文字添加 text-shadow
 
-  分割线 (<hr>):
-  - 样式: border: none; height: 1px; background: linear-gradient(90deg, transparent, rgba(74, 124, 155, 0.25), transparent);
+  分割線 (<hr>):
+  - 樣式: border: none; height: 1px; background: linear-gradient(90deg, transparent, rgba(74, 124, 155, 0.25), transparent);
 
-  第四部分：最终交付要求 (Final Delivery Requirements)
+  第四部分：最終交付要求 (Final Delivery Requirements)
 
-  输出格式: 提供一个完整的、独立的 HTML 内容
-  代码封装: 将完整的HTML代码包裹在Markdown的代码块中
-  无外部依赖: 确保代码自包含，字体通过CDN链接，无本地图片
+  輸出格式: 提供一個完整的、獨立的 HTML 內容
+  程式碼封裝: 將完整的HTML程式碼包裹在Markdown的程式碼區塊中
+  無外部依賴: 確保程式碼自包含，字體透過CDN連結，無本地圖片
 
-  重要补充规则:
-  1. 图片使用占位符格式：<!-- IMG:index -->
-  2. 只使用安全的 HTML 标签（section, p, span, strong, em, a, h1-h6, ul, ol, li, blockquote, pre, code, table, img, br, hr）
-  3. 返回完整的 HTML，不需要其他说明文字
+  重要補充規則:
+  1. 圖片使用佔位符格式：<!-- IMG:index -->
+  2. 只使用安全的 HTML 標籤（section, p, span, strong, em, a, h1-h6, ul, ol, li, blockquote, pre, code, table, img, br, hr）
+  3. 回傳完整的 HTML，不需要其他說明文字
 
-  请转换以下 Markdown内容：
+  請轉換以下 Markdown內容：

@@ -1,0 +1,94 @@
+name: "magazine-dark"
+version: "2.0"
+author: "SocialContent-AI"
+description: "黑金雜誌風 - 適合高端品牌與深夜閱讀，結合 SVG 流沙金動畫"
+
+# 基礎樣式變數
+variables:
+  bg_color: "#1a1a1a"
+  text_primary: "#f0f0f0"
+  text_secondary: "#a0a0a0"
+  accent_color: "#d4af37" # 流沙金
+  font_serif: "'Source Han Serif', 'Noto Serif TC', serif"
+  font_sans: "'Inter', 'Noto Sans TC', sans-serif"
+
+# 注入 CSS (用於 WeChat 文章模式，Social Card 模式會使用內建模板但參考此配色)
+style: |
+  /* 全局重置 */
+  .App {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    font-family: 'Source Han Serif', 'Noto Serif TC', serif;
+    padding: 20px;
+    line-height: 1.8;
+  }
+
+  /* 標題 */
+  h1 {
+    font-size: 24px;
+    color: #d4af37;
+    margin-bottom: 30px;
+    text-align: center;
+    border-bottom: 1px solid #d4af37;
+    padding-bottom: 20px;
+    letter-spacing: 2px;
+  }
+
+  h2 {
+    font-size: 20px;
+    color: #f0f0f0;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    padding-left: 10px;
+    border-left: 3px solid #d4af37;
+  }
+
+  /* 內文 */
+  p {
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #cccccc;
+    text-align: justify;
+  }
+
+  /* 強調 */
+  strong {
+    color: #d4af37;
+    font-weight: bold;
+  }
+
+  /* 引用 */
+  blockquote {
+    margin: 30px 0;
+    padding: 20px;
+    background: #252525;
+    border: 1px solid #333;
+    border-left: none;
+    text-align: center;
+    color: #a0a0a0;
+    font-style: italic;
+  }
+
+  /* SVG 動態背景 (僅在 Web/Social 模式生效) */
+  .bg-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.1;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23d4af37' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+# AI 提示詞模板 (指導 Gemini 撰寫 HTML 結構)
+prompt: |
+  請將以下內容轉換為適合「黑金雜誌」風格的 HTML。
+
+  風格要求：
+  1. 使用 <section class="App"> 包裹所有內容。
+  2. 標題要簡潔有力，帶有神祕感。
+  3. 重點句子使用 <strong></strong> 包裹。
+  4. 金句使用 <blockquote></blockquote>。
+
+  {{MARKDOWN}}
