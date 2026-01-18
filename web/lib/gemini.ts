@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-export async function generateContent(apiKey: string, prompt: string, modelName: string = "gemini-1.5-pro") {
+export async function generateContent(apiKey: string, prompt: string, modelName: string = "gemini-3-flash") {
     try {
         const genAI = new GoogleGenerativeAI(apiKey);
         const model = genAI.getGenerativeModel({ model: modelName });

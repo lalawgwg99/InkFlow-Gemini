@@ -35,7 +35,7 @@ func NewGeminiClient(ctx context.Context, apiKey string, modelName string, log *
 		modelName = os.Getenv("GEMINI_MODEL")
 	}
 	if modelName == "" {
-		modelName = "gemini-3-pro" // 2026 預設最強旗艦模型
+		modelName = "gemini-3-flash" // 2026 預設最強旗艦模型
 	}
 
 	model := client.GenerativeModel(modelName)
