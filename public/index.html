@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InkFlow-Gemini | 台灣社群內容生成神器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        .gradient-text {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <!-- Hero Section -->
+    <div class="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
+        <!-- Decoration -->
+        <div class="absolute top-0 left-0 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2 animate-blob"></div>
+        <div class="absolute top-0 right-0 w-96 h-96 bg-yellow-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 translate-x-1/2 -translate-y-1/2 animate-blob animation-delay-2000"></div>
+
+        <div class="text-center z-10 max-w-4xl">
+            <h1 class="text-6xl md:text-8xl font-black mb-6">
+                InkFlow<span class="gradient-text">-Gemini</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                專為台灣創作者打造的 <span class="text-white font-bold">Social Content AI</span>。
+                <br>IG 圖卡、X 貼文串、FB 長文，一鍵生成。
+            </p>
+            
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <a href="https://github.com/lalawgwg99/InkFlow-Gemini" target="_blank" class="px-8 py-4 bg-white text-gray-900 rounded-full font-bold text-lg hover:bg-gray-100 transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    🌟 訪問 GitHub 儲存庫
+                </a>
+                <a href="#features" class="px-8 py-4 border border-gray-600 rounded-full font-bold text-lg hover:border-white hover:bg-white/10 transition">
+                    了解更多
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div id="features" class="py-24 bg-gray-800/50">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="p-8 bg-gray-900 rounded-2xl hover:bg-gray-800 transition border border-gray-800 hover:border-purple-500/30">
+                    <div class="text-5xl mb-6">🧠</div>
+                    <h3 class="text-2xl font-bold mb-4">Gemini 3 Pro 核心</h3>
+                    <p class="text-gray-400">搭載 2026 最強 Google 旗艦模型，具備「自適應思考」，寫出最有台灣人味的文案。</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="p-8 bg-gray-900 rounded-2xl hover:bg-gray-800 transition border border-gray-800 hover:border-yellow-500/30">
+                    <div class="text-5xl mb-6">💡</div>
+                    <h3 class="text-2xl font-bold mb-4">靈感產生器</h3>
+                    <p class="text-gray-400">沒有主題？輸入 <code>--idea</code>，AI 自動幫你發想 5 個爆款選題並直接完稿。</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="p-8 bg-gray-900 rounded-2xl hover:bg-gray-800 transition border border-gray-800 hover:border-pink-500/30">
+                    <div class="text-5xl mb-6">🎨</div>
+                    <h3 class="text-2xl font-bold mb-4">多平台適配</h3>
+                    <p class="text-gray-400">無論是 IG 黑金圖卡 (Card)、還是 Twitter 貼文串 (Thread)，一鍵 Markdown 轉換。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="py-12 text-center text-gray-500 border-t border-gray-800">
+        <p>&copy; 2026 InkFlow-Gemini. Open Source Project.</p>
+    </div>
+
+</body>
+</html>
